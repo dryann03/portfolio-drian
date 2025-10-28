@@ -1,1 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Drian Portfolio</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
+</head>
+<body>
+  <canvas id="starfield"></canvas>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="logo">Portfolio</div>
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HOME -->
+  <section id="home" class="container fade-in">
+    <div class="text-box">
+      <h2>Hello, it's me</h2>
+      <h1>Drian Ananda</h1>
+      <p>And I am a Web Developer</p>
+
+      <div class="socials">
+        <a href="https://instagram.com/drnxcs_v" target="_blank"><i class="fab fa-instagram"></i></a>
+        <a href="https://tiktok.com/@studentstand" target="_blank"><i class="fab fa-tiktok"></i></a>
+        <a href="https://wa.me/6285135419625" target="_blank"><i class="fab fa-whatsapp"></i></a>
+      </div>
+
+      <a href="#about" class="btn">More About Me</a>
+    </div>
+
+    <div class="image-box">
+      <img src="profil.jpg" alt="Profile Picture" class="profile-pic" id="profilePic">
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="section fade-in">
+    <h2>About Me</h2>
+    <div class="content">
+      I’m <b>Adrian Ananda Putra</b>, a student and passionate explorer of the digital universe.
+I code with HTML, CSS, JavaScript, and Python, turning ideas into living constellations of logic.
+Every project is a new mission — every line of code, a star in my galaxy. 🚀✨
+      </p>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" class="section fade-in">
+    <h2>My Skills</h2>
+    <div class="skills-container">
+      <div class="skill-card"><i class="fab fa-html5"></i> HTML5</div>
+      <div class="skill-card"><i class="fab fa-css3-alt"></i> CSS3</div>
+      <div class="skill-card"><i class="fab fa-js"></i> JavaScript</div>
+      <div class="skill-card"><i class="fab fa-python"></i> Python</div>
+      <div class="skill-card"><i class="fab fa-react"></i> React</div>
+      <div class="skill-card"><i class="fa fa-database"></i> SQL Database</div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="section fade-in">
+    <h2>Contact Me</h2>
+    <div class="contact-box">
+      <p><i class="fa fa-phone"></i> 0851-3541-9625</p>
+      <p><i class="fa fa-envelope"></i> drianananda52@gmail.com</p>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+// === STARFIELD BACKGROUND ===
+const canvas = document.getElementById("starfield");
+const ctx = canvas.getContext("2d");
+let stars = [];
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  stars = [];
+
+  for (let i = 0; i < 150; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      size: Math.random() * 2,
+      speed: 0.2 + Math.random() * 0.5,
+      color: Math.random() > 0.5 ? "#00f7ff" : "#7a00ff",
+      alpha: Math.random(),
+      alphaChange: 0.005 + Math.random() * 0.01,
+    });
+  }
+}
+
+function animateStars() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (let star of stars) {
+    ctx.beginPath();
+    ctx.globalAlpha = star.alpha;
+    ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+    ctx.fillStyle = star.color;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    star.y += star.speed;
+    if (star.y > canvas.height) star.y = 0;
+    star.alpha += star.alphaChange;
+    if (star.alpha <= 0 || star.alpha >= 1) star.alphaChange *= -1;
+  }
+  requestAnimationFrame(animateStars);
+}
+
+resizeCanvas();
+animateStars();
+window.addEventListener("resize", resizeCanvas);
+
+// === SMOOTH SCROLL ===
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener("click", function (e) {
+    e.preventDefault();
+    document.querySelector(this.getAttribute("href")).scrollIntoView({
+      behavior: "smooth"
+    });
+  });
+});
+
+// === FADE-IN ON SCROLL ===
+const faders = document.querySelectorAll(".fade-in");
+
+function showOnScroll() {
+  const triggerBottom = window.innerHeight * 0.85;
+  faders.forEach(el => {
+    const boxTop = el.getBoundingClientRect().top;
+    if (boxTop < triggerBottom) el.classList.add("visible");
+  });
+}
+
+window.addEventListener("scroll", showOnScroll);
+showOnScroll();
+
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  color: #fff;
+  background: #0b1a2d;
+  overflow-x: hidden;
+}
+
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+/* NAVBAR */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 60px;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #00f7ff;
+  text-shadow: 0 0 10px #00f7ff;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+}
+
+nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+  color: #00f7ff;
+}
+
+/* HOME SECTION */
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 100px 60px 120px;
+  min-height: 100vh;
+}
+
+.text-box {
+  max-width: 500px;
+  margin-top: 60px; /* Tambahan supaya semua turun sedikit */
+}
+
+.text-box h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.text-box h1 {
+  font-size: 2.8rem;
+  margin: 10px 0;
+}
+
+.text-box p {
+  margin: 10px 0 25px;
+  color: #b3cde0;
+  font-size: 1rem;
+}
+
+.socials {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 35px; /* menambah jarak sebelum tombol */
+}
+
+.socials a {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00f7ff, #7a00ff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  transition: 0.3s;
+}
+
+.socials a:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px #00f7ff;
+}
+
+.btn {
+  margin-top: 15px;
+  padding: 14px 30px;
+  border-radius: 30px;
+  background: linear-gradient(135deg, #00f7ff, #7a00ff);
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s;
+  font-size: 1rem;
+}
+
+.btn:hover {
+  background: linear-gradient(135deg, #7a00ff, #00f7ff);
+  box-shadow: 0 0 15px #00f7ff;
+}
+
+.image-box img {
+  width: 270px;
+  height: 270px;
+  border-radius: 50%;
+  border: 4px solid white;
+  object-fit: cover;
+  box-shadow: 0 0 25px #00f7ff, 0 0 50px #7a00ff;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.image-box img:hover {
+  transform: scale(1.05) rotate(3deg);
+  box-shadow: 0 0 40px #00f7ff, 0 0 80px #7a00ff;
+}
+
+/* SECTIONS */
+.section {
+  padding: 80px 60px;
+  text-align: center;
+  background: rgba(10, 20, 40, 0.7);
+  border-top: 1px solid #00f7ff40;
+}
+
+.section h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  color: #00f7ff;
+}
+
+.section .content {
+  max-width: 700px;
+  margin: auto;
+}
+
+.icon {
+  width: 80px;
+  margin-bottom: 20px;
+}
+
+/* SKILLS */
+.skills-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.skill-card {
+  background: linear-gradient(135deg, #00f7ff, #7a00ff);
+  padding: 20px 30px;
+  border-radius: 12px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: transform 0.3s ease;
+}
+
+.skill-card:hover {
+  transform: scale(1.1);
+}
+
+/* CONTACT */
+.contact-box {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 12px;
+  display: inline-block;
+  line-height: 1.8;
+}
+
+/* FADE-IN ANIMATION */
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
 
